@@ -36,7 +36,7 @@ const DynamicTable = ({
     });
 
     const formattedHeaders = headers.displayedHeaders.map(header => {
-      if (header.fieldSchema.type === 'relation') {
+      if (['relation'].includes(header.fieldSchema.type)) {
         const sortFieldValue = `${header.name}.${header.metadatas.mainField.name}`;
 
         return {

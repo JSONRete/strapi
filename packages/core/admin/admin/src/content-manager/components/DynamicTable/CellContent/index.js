@@ -5,6 +5,7 @@ import { Typography } from '@strapi/design-system/Typography';
 import Media from './Media';
 import MultipleMedias from './MultipleMedias';
 import Relation from './Relation';
+import RepeatableComponentCell from './RepeatableComponentCell';
 import CellValue from './CellValue';
 
 const TypographyMaxWidth = styled(Typography)`
@@ -33,6 +34,18 @@ const CellContent = ({ content, fieldSchema, metadatas, name, queryInfos, rowId 
         value={content}
         name={name}
         rowId={rowId}
+      />
+    );
+  }
+
+  if (fieldSchema.type === 'component') {
+    return (
+      <RepeatableComponentCell
+        value={content}
+        name={name}
+        rowId={rowId}
+        metadatas={metadatas}
+        fieldSchema={fieldSchema}
       />
     );
   }
