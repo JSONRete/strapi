@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Flex } from '@strapi/design-system/Flex';
 import { Box } from '@strapi/design-system/Box';
 import { Tooltip } from '@strapi/design-system/Tooltip';
 import { Typography } from '@strapi/design-system/Typography';
 import { Popover } from '@strapi/design-system/Popover';
+import { FocusTrap } from '@strapi/design-system/FocusTrap';
 import { SortIcon, stopPropagation } from '@strapi/helper-plugin';
 
 const Button = styled.button`
@@ -43,7 +45,7 @@ const ActionWrapper = styled.div`
   }
 `;
 
-const RepeatableCell = ({ value, metadatas, name }) => {
+const RepeatableCell = ({ value, metadatas }) => {
   const [visible, setVisible] = useState(false);
   const buttonRef = useRef();
 
@@ -53,7 +55,7 @@ const RepeatableCell = ({ value, metadatas, name }) => {
     return '-';
   }
 
-  const mainField = metadatas.mainField.name;
+  const mainField = metadatas.mainField;
 
   return (
     <Flex {...stopPropagation}>
@@ -72,13 +74,15 @@ const RepeatableCell = ({ value, metadatas, name }) => {
 
               {visible && (
                 <Popover source={buttonRef} spacing={16} centered>
-                  <ul>
-                    {value.map(entry => (
-                      <Box key={entry.id} padding={3} as="li">
-                        <Typography>{entry[mainField] || '-'}</Typography>
-                      </Box>
-                    ))}
-                  </ul>
+                  <FocusTrap onEscape={handleTogglePopover}>
+                    <ul>
+                      {value.map(entry => (
+                        <Box key={entry.id} tabIndex={0} padding={3} as="li">
+                          <Typography>{entry[mainField] || '-'}</Typography>
+                        </Box>
+                      ))}
+                    </ul>
+                  </FocusTrap>
                 </Popover>
               )}
             </ActionWrapper>
@@ -87,6 +91,13 @@ const RepeatableCell = ({ value, metadatas, name }) => {
       </Tooltip>
     </Flex>
   );
+};
+
+RepeatableCell.propTypes = {
+  metadatas: PropTypes.shape({
+    mainField: PropTypes.string.isRequired,
+  }).isRequired,
+  value: PropTypes.array.isRequired,
 };
 
 export default RepeatableCell;

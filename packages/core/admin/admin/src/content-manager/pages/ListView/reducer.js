@@ -64,14 +64,9 @@ const listViewReducer = (state = initialState, action) =>
 
           if (attributes[name].type === 'component') {
             const componentName = attributes[name].component;
-            const mainFieldName = get(
+            const mainField = get(
               state,
               ['components', componentName, 'settings', 'mainField'],
-              null
-            );
-            const mainFieldType = get(
-              state,
-              ['components', componentName, 'attributes', mainFieldName, 'type'],
               null
             );
 
@@ -79,10 +74,7 @@ const listViewReducer = (state = initialState, action) =>
               ...header,
               metadatas: {
                 ...metas,
-                mainField: {
-                  name: mainFieldName,
-                  type: mainFieldType,
-                },
+                mainField,
               },
             });
           } else if (attributes[name].type === 'relation') {
