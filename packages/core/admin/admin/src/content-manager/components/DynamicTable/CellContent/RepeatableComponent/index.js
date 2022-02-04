@@ -45,17 +45,19 @@ const ActionWrapper = styled.div`
   }
 `;
 
-const RepeatableCell = ({ value, metadatas }) => {
+const DEFAULT_CONTENT = '-';
+
+const RepeatableComponentCell = ({ value, metadatas }) => {
   const [visible, setVisible] = useState(false);
   const buttonRef = useRef();
 
   const handleTogglePopover = () => setVisible(prev => !prev);
 
   if (!value?.length) {
-    return '-';
+    return DEFAULT_CONTENT;
   }
 
-  const mainField = metadatas.mainField;
+  const { mainField } = metadatas;
 
   return (
     <Flex {...stopPropagation}>
@@ -67,7 +69,7 @@ const RepeatableCell = ({ value, metadatas }) => {
               textColor="neutral800"
               ellipsis
             >
-              {value[0][mainField] || '-'}
+              {value[0][mainField] || DEFAULT_CONTENT}
             </Typography>
             <ActionWrapper>
               <SortIcon />
@@ -78,7 +80,7 @@ const RepeatableCell = ({ value, metadatas }) => {
                     <ul>
                       {value.map(entry => (
                         <Box key={entry.id} tabIndex={0} padding={3} as="li">
-                          <Typography>{entry[mainField] || '-'}</Typography>
+                          <Typography>{entry[mainField] || DEFAULT_CONTENT}</Typography>
                         </Box>
                       ))}
                     </ul>
@@ -93,11 +95,11 @@ const RepeatableCell = ({ value, metadatas }) => {
   );
 };
 
-RepeatableCell.propTypes = {
+RepeatableComponentCell.propTypes = {
   metadatas: PropTypes.shape({
     mainField: PropTypes.string.isRequired,
   }).isRequired,
   value: PropTypes.array.isRequired,
 };
 
-export default RepeatableCell;
+export default RepeatableComponentCell;
