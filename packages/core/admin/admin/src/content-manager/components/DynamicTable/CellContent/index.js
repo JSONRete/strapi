@@ -6,6 +6,7 @@ import Media from './Media';
 import MultipleMedias from './MultipleMedias';
 import Relation from './Relation';
 import RepeatableComponent from './RepeatableComponent';
+import SingleComponent from './SingleComponent';
 import CellValue from './CellValue';
 
 const TypographyMaxWidth = styled(Typography)`
@@ -39,7 +40,11 @@ const CellContent = ({ content, fieldSchema, metadatas, name, queryInfos, rowId 
   }
 
   if (fieldSchema.type === 'component') {
-    return <RepeatableComponent value={content} metadatas={metadatas} />;
+    if (fieldSchema.repeatable === true) {
+      return <RepeatableComponent value={content} metadatas={metadatas} />;
+    }
+
+    return <SingleComponent value={content} metadatas={metadatas} />;
   }
 
   return (
@@ -56,8 +61,11 @@ CellContent.defaultProps = {
 
 CellContent.propTypes = {
   content: PropTypes.any,
-  fieldSchema: PropTypes.shape({ multiple: PropTypes.bool, type: PropTypes.string.isRequired })
-    .isRequired,
+  fieldSchema: PropTypes.shape({
+    multiple: PropTypes.bool,
+    type: PropTypes.string.isRequired,
+    repeatable: PropTypes.bool.isRequired,
+  }).isRequired,
   metadatas: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   rowId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
